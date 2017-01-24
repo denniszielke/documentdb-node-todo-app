@@ -14,8 +14,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var appInsights = require('applicationinsights');
-appInsights.setup(config.instrumentationKey).start();
-
+appInsights.setup(config.instrumentationKey).setAutoCollectRequests(true).start();
 var app = express();
 
 // view engine setup

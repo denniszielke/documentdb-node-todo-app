@@ -18,12 +18,17 @@ TaskList.prototype = {
       }]
     };
 
-    self.insightsClient.trackEvent('Show Tasks');
+    self.insightsClient.trackEvent('Showing Tasks');
+    var startDate = new Date();
 
     self.taskDao.find(querySpec, function(err, items) {
       if (err) {
         throw (err);
       }
+
+      var endDate = new Date();
+      var duration = endDate - startDate;
+      self.insightsClient.trackMetric("Loaded Tasks", duration);
 
       res.render('index', {
         title: 'My ToDo List ',
@@ -38,10 +43,16 @@ TaskList.prototype = {
 
     self.insightsClient.trackEvent('Adding Task', {category: item.category});
 
+    var startDate = new Date();
+
     self.taskDao.addItem(item, function(err) {
       if (err) {
         throw (err);
       }
+      
+      var endDate = new Date();
+      var duration = endDate - startDate;
+      self.insightsClient.trackMetric("Added Task", duration);
 
       res.redirect('/');
     });
