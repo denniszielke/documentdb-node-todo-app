@@ -28,20 +28,26 @@
       }
     },
   "resources": [
-              {
-                  "apiVersion": "2015-04-08",
-                  "type": "Microsoft.DocumentDb/databaseAccounts",
-                  "name": "[parameters('databaseAccountName')]", 
-                  "location": "[parameters('Location')]", 
-                  "properties": {
-                      "name": "[parameters('databaseAccountName')]",
-                      "databaseAccountOfferType":  "Standard"
-                  }
-              },
+    {
+        "apiVersion": "2015-04-08",
+        "type": "Microsoft.DocumentDb/databaseAccounts",
+        "name": "[parameters('databaseAccountName')]", 
+        "tags": {
+                "displayName": "DocumentDb"
+            },
+        "location": "[parameters('Location')]", 
+        "properties": {
+            "name": "[parameters('databaseAccountName')]",
+            "databaseAccountOfferType":  "Standard"
+        }
+    },
     {
         "apiVersion": "2014-04-01",
         "name": "[parameters('hostingPlanName')]",
         "type": "Microsoft.Web/serverFarms",
+        "tags": {
+                "displayName": "Hostingplan"
+            },
         "location": "[parameters('Location')]",
         "properties": {
             "name": "[parameters('hostingPlanName')]",
@@ -59,7 +65,8 @@
           "[concat('Microsoft.Web/serverFarms/', parameters('hostingPlanName'))]"
         ],
         "tags": {
-            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "empty"
+            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "empty",
+             "displayName": "Website"
         },
         "properties": {
             "name": "[parameters('siteName')]",
@@ -85,11 +92,15 @@
                   "appSettings":  [
                       {
                           "Value":  "[reference(concat('Microsoft.DocumentDb/databaseAccounts/', parameters('databaseAccountName'))).documentEndpoint]",
-                          "Name":  "endpoint"
+                          "Name":  "ENDPOINT"
                       },
                       {
                           "Value":  "[listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', parameters('databaseAccountName')), '2015-04-08').primaryMasterKey]",
-                          "Name":  "authKey"
+                          "Name":  "AUTHKEY"
+                      },
+                      {
+                          "Value":  "6.9.1",
+                          "Name":  "WEBSITE_NODE_DEFAULT_VERSION"
                       }
                   ]
               }

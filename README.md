@@ -12,29 +12,17 @@ This sample shows you how to use the Microsoft Azure DocumentDB service to store
 For a complete end-to-end walk-through of creating this application, please refer to the [full tutorial on the Azure documentation page](https://azure.microsoft.com/en-us/documentation/articles/documentdb-nodejs-application/)
 
 ## Running this sample
-1. Before you can run this sample, you must have the following perquisites:
-	- An active Azure DocumentDB account - If you don't have an account, refer to the [Create a DocumentDB account](https://azure.microsoft.com/en-us/documentation/articles/documentdb-create-account/) article.
-	- [Node.js](https://nodejs.org/en/) version v0.10.29 or higher.
-	- [Express generator](http://expressjs.com/starter/generator.html) (you can install this via npm install express-generator -g)
-	- [Git](http://git-scm.com/).
+1. Deploy the arm template in arm/Website.json to azure
 
-2. Clone this repository, or download the zip file.
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdenniszielke%2Fdocumentdb-node-todo-app%2Fmaster%2Farm%2FWebSite.json" target="_blank">
+    <img src="http://azuredeploy.net/deploybutton.png"/>
+</a>  
 
-3. Retrieve the URI and PRIMARY KEY (or SECONDARY KEY) values from the Keys blade of your DocumentDB account in the Azure Preview portal. For more information on obtaining endpoint & keys for your DocumentDB account refer to [How to manage a DocumentDB account](https://azure.microsoft.com/en-us/documentation/articles/documentdb-manage-account/#keys)
-
-	If you don't have an account, see [Create a DocumentDB database account](https://azure.microsoft.com/en-us/documentation/articles/documentdb-create-account/) to set one up.
-
-4. In the **config.js** file, located in the **src** folder, find **config.host** and **config.authKey** and replace the placeholder values with the values obtained for your account.
-
-	<add key="endpoint" value="~enter URI for your DocumentDB Account, from Azure Preview portal~" /> 
-	<add key="authKey" value="~enter either Primary or Secondary key for your DocumentDB Account, from Azure Preview portal~" /> 
-
-5. Install the dependencies by opening a terminal, navigating to the directory in which the sample was installed, and running **npm install**. 
-
-6. In the terminal, run **npm start** to start your start your node application. 
-
-7. Launch a browser and navigate to **http://127.0.0.1:3000/**
-![My ToDo List Node.js application](./media/run-1.png)
+It will deploy the following resources
+- DocumentDb
+- App service
+- Application Insights
+- DocumentDb Connection configuration inside the app service appsettings
 
 ## Deploy this sample to Azure
 
