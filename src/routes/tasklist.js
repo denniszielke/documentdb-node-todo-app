@@ -1,8 +1,9 @@
 var DocumentDBClient = require('documentdb').DocumentClient;
 var async = require('async');
 
-function TaskList(taskDao) {
+function TaskList(taskDao, insightsClient) {
   this.taskDao = taskDao;
+  this.insightsClient = insightsClient;
 }
 
 TaskList.prototype = {
@@ -16,6 +17,8 @@ TaskList.prototype = {
         value: false
       }]
     };
+
+    self.insightsClient.trackEvent('Show Tasks');
 
     self.taskDao.find(querySpec, function(err, items) {
       if (err) {
@@ -33,6 +36,8 @@ TaskList.prototype = {
     var self = this;
     var item = req.body;
 
+    self.insightsClient.trackEvent('Adding Task', {category: item.category});
+
     self.taskDao.addItem(item, function(err) {
       if (err) {
         throw (err);
@@ -45,6 +50,8 @@ TaskList.prototype = {
   completeTask: function(req, res) {
     var self = this;
     var completedTasks = Object.keys(req.body);
+
+    self.insightsClient.trackEvent('Completing Task');
 
     async.forEach(completedTasks, function taskIterator(completedTask, callback) {
       self.taskDao.updateItem(completedTask, function(err) {

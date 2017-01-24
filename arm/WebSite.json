@@ -136,7 +136,8 @@
                     "name": "web",
                     "dependsOn": [
                         "[concat('Microsoft.Web/Sites/', variables('webSiteName'))]",
-                        "[concat('Microsoft.DocumentDb/databaseAccounts/', parameters('databaseAccountName'))]"
+                        "[concat('Microsoft.DocumentDb/databaseAccounts/', parameters('databaseAccountName'))]",
+                        "[concat('Microsoft.Insights/Components/', variables('webSiteName'))]"
                     ],
                     "properties": {
                         "connectionStrings": [
@@ -154,6 +155,10 @@
                             {
                                 "Value": "[listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', parameters('databaseAccountName')), '2015-04-08').primaryMasterKey]",
                                 "Name": "AUTHKEY"
+                            },
+                            {
+                                "Value": "[reference(concat('Microsoft.Insights/Components/', variables('webSiteName'))).InstrumentationKey]",
+                                "Name": "INSTRUMENTATIONKEY"
                             },
                             {
                                 "Value": "6.9.1",

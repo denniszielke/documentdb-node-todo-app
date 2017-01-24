@@ -13,6 +13,8 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var appInsights = require('applicationinsights');
+appInsights.setup(config.instrumentationKey).start();
 
 var app = express();
 
@@ -28,12 +30,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var insightsClient = appInsights.getClient(config.instrumentationKey);
+insightsClient.trackEvent('Initializing');
+
 // Todo App
 var docDbClient = new DocumentDBClient(config.host, {
     masterKey: config.authKey
 });
 var taskDao = new TaskDao(docDbClient, config.databaseId, config.collectionId);
-var taskList = new TaskList(taskDao);
+var taskList = new TaskList(taskDao, insightsClient);
 taskDao.init(function(err) { if(err) throw err; });
 
 app.get('/', taskList.showTasks.bind(taskList));
